@@ -1,0 +1,6 @@
+# ninja log v5
+34	1447	7411911461339405	CMakeFiles/machine_learning.dir/main.cpp.obj	411fe581829ceadb
+43	1544	7411911462301248	CMakeFiles/machine_learning.dir/matrix.cpp.obj	4776b346f92b25d2
+1881	2063	7411911467418584	machine_learning.exe	fd7940a70be158a5
+50	1881	7411911465705463	CMakeFiles/machine_learning.dir/neural_network.cpp.obj	4970499434a7adba
+15	1016	7411799097200035	CMakeFiles/machine_learning.dir/random_number_generator.cpp.obj	529f33e660ddb13
