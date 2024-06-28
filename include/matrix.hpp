@@ -22,6 +22,7 @@ public:
 
     Matrix &operator=(Matrix const&_other);
 
+    Matrix operator*(double _scalar) const;
 
 private:
     std::vector<std::vector<double>> m_data;

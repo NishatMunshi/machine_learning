@@ -135,3 +135,14 @@ std::vector<double> Matrix::vector() const {
 
     return m_data.front();
 }
+
+Matrix Matrix::operator*(double const _scalar) const {
+    Matrix result = *this;
+    for(auto &row : result.m_data) {
+        for(auto &elem : row) {
+            elem *= _scalar;
+        }
+    }
+
+    return result;
+}
