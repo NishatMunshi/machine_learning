@@ -39,7 +39,7 @@ std::vector<double> Neural_Network::feed_forward(std::vector<double> const &_inp
         throw std::invalid_argument("input size not compatible with the current topology");
     }
 
-    Z.front() = Matrix{_input}; // input layer
+    Z.front() = Matrix{_input};              // input layer
     A.front() = activation_function((Z[0])); // input layer
 
     for (std::size_t i = 1; i < W.size(); ++i) {
@@ -79,13 +79,13 @@ void Neural_Network::calculate_gradient(std::vector<double> const &_expected_out
 }
 
 double Neural_Network::del_C_del_W(size_t _layerIndex, size_t _k, size_t _j) const {
-    return A.at(_layerIndex - 1).at(0, _k) // how we affect z
+    return A.at(_layerIndex - 1).at(0, _k)        // how we affect z
            * delC_delB.at(_layerIndex).at(0, _j); // how z affects a and how a affects cost;
 }
 
 double Neural_Network::del_C_del_B(size_t _layerIndex, size_t _j) const {
-    return 1  // how we affect z
-           * delA_delZ.at(_layerIndex).at(0, _j) // how z affects a
+    return 1                                      // how we affect z
+           * delA_delZ.at(_layerIndex).at(0, _j)  // how z affects a
            * delC_delA.at(_layerIndex).at(0, _j); //how a affects cost
 }
 
@@ -98,8 +98,8 @@ double Neural_Network::del_C_del_A(std::size_t _layerIndex, std::size_t _k, std:
     double result = 0.0;
     std::size_t const nextLayerIndex = _layerIndex + 1;
     for (std::size_t j = 0; j < A.at(nextLayerIndex).cols(); ++j) {
-        result +=   W.at(nextLayerIndex).at(_k, j) // how we affect z of next layer
-                  * delA_delZ.at(nextLayerIndex).at(0, j) // how z of next layer affects a of next layer
+        result +=   W.at(nextLayerIndex).at(_k, j)         // how we affect z of next layer
+                  * delA_delZ.at(nextLayerIndex).at(0, j)  // how z of next layer affects a of next layer
                   * delC_delA.at(nextLayerIndex).at(0, j); // how a of next layer affects cost
     }
     return result;
@@ -126,7 +126,6 @@ void Neural_Network::backprop(std::vector<double> const &_expected) {
         }
     }
 }
-
 
 Matrix Neural_Network::activation_function(Matrix const &_mat) {
     Matrix Y = _mat;

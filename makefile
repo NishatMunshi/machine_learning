@@ -1,16 +1,42 @@
-all: graphics
+# Specify the compiler
+CXX = g++
 
+# C++ standard
+CXXSTD = c++23
+
+# Specify the compiler flags
+CXXFLAGS = -g -Wall -Wextra -std=$(CXXSTD) -DSFML_STATIC
+
+# Specify the source files
+SRCS = $(shell ls *.cpp)
+
+# Specify the include paths
+INCLUDEPATHS = -I"E:/programming_tools/SFML/SFML_Sources/include"
+
+# Specify the dependendicies
+LINKERINCLUDE = -L"E:\programming_tools\SFML\SFML_Build\lib" \
+				-L"E:\programming_tools\SFML\SFML_Sources\extlibs\libs-msvc\x64"
+
+# Linker flags
+LINKERFLAGS = -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lsfml-main-d -lopengl32 -lwinmm -lgdi32 -lfreetype
+
+# Specify the object files
+OBJS = $(SRCS:.cpp=.o)
+
+# Specify the executable file
+TARGET = main.exe
+
+# Default target
+all: $(TARGET) 
+
+# Rule to build the executable
+$(TARGET): $(OBJS)
+	$(CXX) -o $(TARGET) $(OBJS) $(LINKERINCLUDE) $(LINKERFLAGS)
+
+# Rule to build object files
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDEPATHS)
+
+# Clean target
 clean:
-	rm -fr ./*.o
-	rm main.exe
-
-graphics: graphics_compile graphics_link graphics_run
-
-graphics_compile:
-	E:/programming_tools/msys64/mingw64/bin/g++.exe -std=c++20 -O3 -Wall -c "./main.cpp" "./matrix.cpp" "./neural_network.cpp" "./random_number_generator.cpp" -I"E:\programming_tools\SFML\SFML_Sources\include" -I"./include" -DSFML_STATIC
-
-graphics_link:
-	E:/programming_tools/msys64/mingw64/bin/g++.exe -o main "./main.o" "./matrix.o" "./neural_network.o" "./random_number_generator.o" -L"E:\programming_tools\SFML\SFML_Build\lib" -L"E:\programming_tools\SFML\SFML_Sources\extlibs\libs-msvc\x64" -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lsfml-main-d -lopengl32 -lwinmm -lgdi32 -lfreetype
-
-graphics_run:
-	.\main
+	rm -f *.o $(TARGET)

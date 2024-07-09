@@ -7,6 +7,7 @@ public:
     explicit Matrix(size_t _rows, size_t _cols);
     explicit Matrix(std::vector<double> const &_vec);
     [[nodiscard]] std::vector<double> vector() const;
+    Matrix(Matrix const&) = default;
 
     void print() const;
 
