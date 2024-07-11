@@ -1,42 +1,38 @@
-# Specify the compiler
+# directories:
+OUTPUT_DIR = ./build
+
+# compiler stuff
 CXX = g++
+CXXSTD = c++20
+CXXFLAGS = -Wall -Wextra -std=$(CXXSTD) -g -Wpedantic -DSFML_STATIC
+INCLUDE_PATHS = -I"E:/programming_tools/SFML/SFML_Sources/include"
 
-# C++ standard
-CXXSTD = c++23
+# linker stuff
+LINKER_PATHS = -L"E:\programming_tools\SFML\SFML_Build\lib" -L"E:\programming_tools\SFML\SFML_Sources\extlibs\libs-msvc\x64"
+LINKER_FLAGS = -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lsfml-main-d -lopengl32 -lwinmm -lgdi32 -lfreetype
 
-# Specify the compiler flags
-CXXFLAGS = -g -Wall -Wextra -std=$(CXXSTD) -DSFML_STATIC
-
-# Specify the source files
+# files
 SRCS = $(shell ls *.cpp)
-
-# Specify the include paths
-INCLUDEPATHS = -I"E:/programming_tools/SFML/SFML_Sources/include"
-
-# Specify the dependendicies
-LINKERINCLUDE = -L"E:\programming_tools\SFML\SFML_Build\lib" \
-				-L"E:\programming_tools\SFML\SFML_Sources\extlibs\libs-msvc\x64"
-
-# Linker flags
-LINKERFLAGS = -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lsfml-main-d -lopengl32 -lwinmm -lgdi32 -lfreetype
-
-# Specify the object files
 OBJS = $(SRCS:.cpp=.o)
+OBJS := $(addprefix $(OUTPUT_DIR)/, $(OBJS))
 
-# Specify the executable file
-TARGET = main.exe
+# output stuff
+TARGET = $(OUTPUT_DIR)/main.exe
+ARGS = 
 
-# Default target
-all: $(TARGET) 
+all: $(TARGET)
 
-# Rule to build the executable
-$(TARGET): $(OBJS)
-	$(CXX) -o $(TARGET) $(OBJS) $(LINKERINCLUDE) $(LINKERFLAGS)
+# compile:
+$(OUTPUT_DIR)/%.o: %.cpp
+	mkdir -p $(OUTPUT_DIR); $(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
-# Rule to build object files
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDEPATHS)
+# link:
+$(TARGET): $(OBJS) makefile
+	mkdir -p $(OUTPUT_DIR); $(CXX) -o $(TARGET) $(OBJS) $(LINKER_PATHS) $(LINKER_FLAGS)
 
-# Clean target
 clean:
-	rm -f *.o $(TARGET)
+	rm -rf $(OUTPUT_DIR)
+
+run:
+	make
+	$(TARGET) $(ARGS)
