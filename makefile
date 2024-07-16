@@ -1,4 +1,5 @@
 # directories:
+SOURCE_DIR = ./src
 OUTPUT_DIR = ./build
 
 # compiler stuff
@@ -12,18 +13,17 @@ LINKER_PATHS = -L"E:\programming_tools\SFML\SFML_Build\lib" -L"E:\programming_to
 LINKER_FLAGS = -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lsfml-main-d -lopengl32 -lwinmm -lgdi32 -lfreetype
 
 # files
-SRCS = $(shell ls *.cpp)
-OBJS = $(SRCS:.cpp=.o)
-OBJS := $(addprefix $(OUTPUT_DIR)/, $(OBJS))
+SRCS = $(shell ls $(SOURCE_DIR)/*.cpp)
+OBJS = $(addsuffix .o, $(addprefix $(OUTPUT_DIR)/, $(notdir $(basename $(SRCS)))))
 
 # output stuff
 TARGET = $(OUTPUT_DIR)/main.exe
-ARGS = 
+ARGS =
 
 all: $(TARGET)
 
 # compile:
-$(OUTPUT_DIR)/%.o: %.cpp
+$(OUTPUT_DIR)/%.o: $(SOURCE_DIR)/%.cpp
 	mkdir -p $(OUTPUT_DIR); $(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
 
 # link:
@@ -34,5 +34,4 @@ clean:
 	rm -rf $(OUTPUT_DIR)
 
 run:
-	make
 	$(TARGET) $(ARGS)
