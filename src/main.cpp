@@ -1,5 +1,6 @@
-#include "SFML/Graphics.hpp"
 #include "../include/neural_network.hpp"
+#include "SFML/Graphics.hpp"
+
 #include <cmath>
 #include <iostream>
 
@@ -25,7 +26,7 @@ int main() {
         sf::Event event{};
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                window.close();
+                return 0;
             }
         }
 

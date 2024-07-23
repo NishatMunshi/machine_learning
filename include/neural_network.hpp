@@ -1,14 +1,13 @@
-#ifndef MACHINE_LEARNING_NEURAL_NETWORK_HPP
-#define MACHINE_LEARNING_NEURAL_NETWORK_HPP
-#include <vector>
-#include <cstdint>
+#pragma once
+
 #include "matrix.hpp"
+
 class Neural_Network {
 public:
-    explicit Neural_Network(std::vector<size_t> const&_topology);
+    explicit Neural_Network(std::vector<size_t> const &_topology);
 
-    std::vector<double> feed_forward(std::vector<double> const& _input);
-    void backprop(std::vector<double> const&_expected);
+    std::vector<double> feed_forward(std::vector<double> const &_input);
+    void backprop(std::vector<double> const &_expected);
 
     static double mean_squared_error(std::vector<double> const &_result, std::vector<double> const &_expected);
 
@@ -24,7 +23,7 @@ private:
     std::vector<Matrix> delC_delW;
     std::vector<Matrix> delC_delB;
 
-    static Matrix activation_function(Matrix const& _mat);
+    static Matrix activation_function(Matrix const &_mat);
     static double activation_function(double _x);
     static double activation_function_derivative(double _x);
 
@@ -37,4 +36,3 @@ private:
 
     static double m_learning_rate;
 };
-#endif //MACHINE_LEARNING_NEURAL_NETWORK_HPP

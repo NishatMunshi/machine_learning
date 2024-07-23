@@ -1,8 +1,8 @@
 #include "../include/neural_network.hpp"
 #include "../include/random_number_generator.hpp"
-#include <stdexcept>
 #include <cmath>
 #include <iostream>
+#include <stdexcept>
 
 Neural_Network::Neural_Network(std::vector<std::size_t> const &_topology) {
     std::size_t const layers = _topology.size();
@@ -30,7 +30,6 @@ Neural_Network::Neural_Network(std::vector<std::size_t> const &_topology) {
                 W.back().at(i, j) = random.generate();
             }
         }
-
     }
 }
 
@@ -56,7 +55,7 @@ void Neural_Network::calculate_gradient(std::vector<double> const &_expected_out
         auto const prevLayerLength = W.at(layerIndex).rows();
 
         for (std::size_t j = 0; j < thisLayerLength; ++j) {
-            //order matters A->Z->B->W
+            // order matters A->Z->B->W
             auto const da = del_C_del_A(layerIndex, j, _expected_output);
             delC_delA.at(layerIndex).at(0, j) = da;
 
@@ -86,7 +85,7 @@ double Neural_Network::del_C_del_W(size_t _layerIndex, size_t _k, size_t _j) con
 double Neural_Network::del_C_del_B(size_t _layerIndex, size_t _j) const {
     return 1                                      // how we affect z
            * delA_delZ.at(_layerIndex).at(0, _j)  // how z affects a
-           * delC_delA.at(_layerIndex).at(0, _j); //how a affects cost
+           * delC_delA.at(_layerIndex).at(0, _j); // how a affects cost
 }
 
 double Neural_Network::del_C_del_A(std::size_t _layerIndex, std::size_t _k, std::vector<double> _expected) const {
@@ -98,7 +97,7 @@ double Neural_Network::del_C_del_A(std::size_t _layerIndex, std::size_t _k, std:
     double result = 0.0;
     std::size_t const nextLayerIndex = _layerIndex + 1;
     for (std::size_t j = 0; j < A.at(nextLayerIndex).cols(); ++j) {
-        result +=   W.at(nextLayerIndex).at(_k, j)         // how we affect z of next layer
+        result += W.at(nextLayerIndex).at(_k, j)           // how we affect z of next layer
                   * delA_delZ.at(nextLayerIndex).at(0, j)  // how z of next layer affects a of next layer
                   * delC_delA.at(nextLayerIndex).at(0, j); // how a of next layer affects cost
     }

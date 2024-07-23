@@ -6,18 +6,18 @@ OUTPUT_DIR = ./build
 CXX = g++
 CXXSTD = c++20
 CXXFLAGS = -Wall -Wextra -std=$(CXXSTD) -g -Wpedantic -DSFML_STATIC
-INCLUDE_PATHS = -I"E:/programming_tools/SFML/SFML_Sources/include"
+INCLUDE_PATHS =
 
 # linker stuff
-LINKER_PATHS = -L"E:\programming_tools\SFML\SFML_Build\lib" -L"E:\programming_tools\SFML\SFML_Sources\extlibs\libs-msvc\x64"
-LINKER_FLAGS = -lsfml-graphics-s-d -lsfml-window-s-d -lsfml-system-s-d -lsfml-main-d -lopengl32 -lwinmm -lgdi32 -lfreetype
+LINKER_PATHS =
+LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # files
 SRCS = $(shell ls $(SOURCE_DIR)/*.cpp)
-OBJS = $(addsuffix .o, $(addprefix $(OUTPUT_DIR)/, $(notdir $(basename $(SRCS)))))
+OBJS = $(patsubst $(SOURCE_DIR)/%.cpp, $(OUTPUT_DIR)/%.o, $(SRCS))
 
 # output stuff
-TARGET = $(OUTPUT_DIR)/main.exe
+TARGET = $(OUTPUT_DIR)/main
 ARGS =
 
 all: $(TARGET)
