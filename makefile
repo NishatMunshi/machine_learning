@@ -1,37 +1,52 @@
-# directories:
-SOURCE_DIR = ./src
-OUTPUT_DIR = ./build
+# directories
+HDR_DIR  = ./include
+SRC_DIR  = ./src
+OBJ_DIR  = ./build
+EXE_DIR  = ./exec
+BLD_DIRS = $(OBJ_DIR) $(EXE_DIR)
+TMP_DIRS = $(OBJ_DIR)
 
-# compiler stuff
-CXX = g++
-CXXSTD = c++20
-CXXFLAGS = -Wall -Wextra -std=$(CXXSTD) -g -Wpedantic -DSFML_STATIC
+# file extentions
+SRC_EXT = cpp
+OBJ_EXT = o
+HDR_EXT = hpp
+
+# files
+SRCS = $(wildcard $(SRC_DIR)/*.$(SRC_EXT))
+OBJS = $(patsubst $(SRC_DIR)/%.$(SRC_EXT), $(OBJ_DIR)/%.$(OBJ_EXT), $(SRCS))
+HDRS = $(patsubst $(SRC_DIR)/%.$(SRC_EXT), $(HDR_DIR)/%.$(HDR_EXT), $(SRCS))
+
+# target executable
+TARGET = $(EXE_DIR)/main
+
+# compiler info
+CXX       = g++
+CXX_STD   = c++20
+CXX_FLAGS = -g -Wall -Wextra -std=$(CXX_STD)
 INCLUDE_PATHS =
 
 # linker stuff
+LINKER = $(CXX)
 LINKER_PATHS =
 LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
-# files
-SRCS = $(shell ls $(SOURCE_DIR)/*.cpp)
-OBJS = $(patsubst $(SOURCE_DIR)/%.cpp, $(OUTPUT_DIR)/%.o, $(SRCS))
+# rules to build the target
+all: build $(TARGET)
 
-# output stuff
-TARGET = $(OUTPUT_DIR)/main
-ARGS =
+# compile
+$(OBJ_DIR)/%.$(OBJ_EXT): $(SRC_DIR)/%.$(SRC_EXT) $(HDR_DIR)/%.$(HDR_EXT)
+	$(CXX) $(CXX_FLAGS) -o $@ -c $< $(INCLUDE_PATHS)
 
-all: $(TARGET)
+# link
+$(TARGET): $(OBJS)
+	$(CXX) -o $(TARGET) $(OBJS) $(LINKER_PATHS) $(LINKER_FLAGS)
 
-# compile:
-$(OUTPUT_DIR)/%.o: $(SOURCE_DIR)/%.cpp
-	mkdir -p $(OUTPUT_DIR); $(CXX) $(CXXFLAGS) -c $< -o $@ $(INCLUDE_PATHS)
+# rule to make build directories
+build:
+	mkdir -p $(BLD_DIRS)
 
-# link:
-$(TARGET): $(OBJS) makefile
-	mkdir -p $(OUTPUT_DIR); $(CXX) -o $(TARGET) $(OBJS) $(LINKER_PATHS) $(LINKER_FLAGS)
-
+# rule to clean the temporary directories
 clean:
-	rm -rf $(OUTPUT_DIR)
+	rm -rf $(TMP_DIRS)
 
-run:
-	$(TARGET) $(ARGS)
+.PHONY: all build clean
