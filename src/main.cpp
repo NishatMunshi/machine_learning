@@ -16,10 +16,10 @@ int main() {
                                                  {1},
                                                  {1},
                                                  {0}};
-    // -------------------------------------
+    // -----------------------------------------------
 
     std::vector<size_t> const topology = {input.front().size(), 2, expectation.front().size()};
-    Neural_Network network{topology};
+    neural_network network{topology};
 
     sf::RenderWindow window{sf::VideoMode(WINDOW_DIMENTION, WINDOW_DIMENTION), "machine_learning"};
     for (size_t epoch = 0; epoch < SIZE_MAX; ++epoch) {
@@ -35,7 +35,7 @@ int main() {
         for (size_t j = 0; j < input.size(); ++j) {
             auto output = network.feed_forward(input[j]);
             network.backprop(expectation[j]);
-            error += Neural_Network::mean_squared_error(output, expectation[j]);
+            error += neural_network::mean_squared_error(output, expectation[j]);
         }
 
         point.position.x = 5 * epoch / WINDOW_DIMENTION;

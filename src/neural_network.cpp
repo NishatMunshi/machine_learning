@@ -4,13 +4,13 @@
 #include <iostream>
 #include <stdexcept>
 
-Neural_Network::Neural_Network(std::vector<std::size_t> const &_topology) {
+neural_network::neural_network(std::vector<std::size_t> const &_topology) {
     std::size_t const layers = _topology.size();
     if (layers < 2) {
         throw std::invalid_argument("cannot create neural network with less than two layers.");
     }
 
-    Random_Number_Generator random{-1.0, 1.0};
+    random_number_generator random{-1.0, 1.0};
 
     for (std::size_t layerIndex = 0; layerIndex < layers; ++layerIndex) {
         W.emplace_back(layerIndex == 0 ? 0 : _topology.at(layerIndex - 1), _topology.at(layerIndex));
@@ -33,12 +33,12 @@ Neural_Network::Neural_Network(std::vector<std::size_t> const &_topology) {
     }
 }
 
-std::vector<double> Neural_Network::feed_forward(std::vector<double> const &_input) {
+std::vector<double> neural_network::feed_forward(std::vector<double> const &_input) {
     if (_input.size() not_eq Z.front().cols()) {
         throw std::invalid_argument("input size not compatible with the current topology");
     }
 
-    Z.front() = Matrix{_input};              // input layer
+    Z.front() = matrix{_input};              // input layer
     A.front() = activation_function((Z[0])); // input layer
 
     for (std::size_t i = 1; i < W.size(); ++i) {
@@ -49,7 +49,7 @@ std::vector<double> Neural_Network::feed_forward(std::vector<double> const &_inp
     return A.back().vector();
 }
 
-void Neural_Network::calculate_gradient(std::vector<double> const &_expected_output) {
+void neural_network::calculate_gradient(std::vector<double> const &_expected_output) {
     for (std::size_t layerIndex = A.size() - 1; true; layerIndex--) {
         auto const thisLayerLength = W.at(layerIndex).cols();
         auto const prevLayerLength = W.at(layerIndex).rows();
@@ -77,18 +77,18 @@ void Neural_Network::calculate_gradient(std::vector<double> const &_expected_out
     }
 }
 
-double Neural_Network::del_C_del_W(size_t _layerIndex, size_t _k, size_t _j) const {
+double neural_network::del_C_del_W(size_t _layerIndex, size_t _k, size_t _j) const {
     return A.at(_layerIndex - 1).at(0, _k)        // how we affect z
            * delC_delB.at(_layerIndex).at(0, _j); // how z affects a and how a affects cost;
 }
 
-double Neural_Network::del_C_del_B(size_t _layerIndex, size_t _j) const {
+double neural_network::del_C_del_B(size_t _layerIndex, size_t _j) const {
     return 1                                      // how we affect z
            * delA_delZ.at(_layerIndex).at(0, _j)  // how z affects a
            * delC_delA.at(_layerIndex).at(0, _j); // how a affects cost
 }
 
-double Neural_Network::del_C_del_A(std::size_t _layerIndex, std::size_t _k, std::vector<double> _expected) const {
+double neural_network::del_C_del_A(std::size_t _layerIndex, std::size_t _k, std::vector<double> _expected) const {
     // base case
     if (_layerIndex == A.size() - 1) {
         return 2 * (A.back().at(0, _k) - _expected.at(_k));
@@ -104,11 +104,11 @@ double Neural_Network::del_C_del_A(std::size_t _layerIndex, std::size_t _k, std:
     return result;
 }
 
-double Neural_Network::del_A_del_Z(size_t _layerIndex, size_t _j) const {
+double neural_network::del_A_del_Z(size_t _layerIndex, size_t _j) const {
     return activation_function_derivative(Z.at(_layerIndex).at(0, _j));
 }
 
-void Neural_Network::backprop(std::vector<double> const &_expected) {
+void neural_network::backprop(std::vector<double> const &_expected) {
     if (A.back().cols() not_eq _expected.size()) {
         throw std::invalid_argument("expected vector size not compatible with the current topology");
     }
@@ -126,8 +126,8 @@ void Neural_Network::backprop(std::vector<double> const &_expected) {
     }
 }
 
-Matrix Neural_Network::activation_function(Matrix const &_mat) {
-    Matrix Y = _mat;
+matrix neural_network::activation_function(matrix const &_mat) {
+    matrix Y = _mat;
 
     for (std::size_t i = 0; i < Y.rows(); ++i) {
         for (std::size_t j = 0; j < Y.cols(); ++j) {
@@ -138,15 +138,15 @@ Matrix Neural_Network::activation_function(Matrix const &_mat) {
     return Y;
 }
 
-double Neural_Network::activation_function(double const _x) {
+double neural_network::activation_function(double const _x) {
     return 1 / (1 + exp(-_x));
 }
 
-double Neural_Network::activation_function_derivative(double _x) {
+double neural_network::activation_function_derivative(double _x) {
     return exp(-_x) / ((1 + exp(-_x)) * (1 + exp(-_x)));
 }
 
-double Neural_Network::mean_squared_error(std::vector<double> const &_result, std::vector<double> const &_expected) {
+double neural_network::mean_squared_error(std::vector<double> const &_result, std::vector<double> const &_expected) {
     if (_result.size() not_eq _expected.size()) {
         throw std::invalid_argument("[MNE]: result and expected vectors have different sizes");
     }
@@ -160,4 +160,4 @@ double Neural_Network::mean_squared_error(std::vector<double> const &_result, st
     return error;
 }
 
-double Neural_Network::m_learning_rate = 1e-1;
+double neural_network::m_learning_rate = 1e-1;

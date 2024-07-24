@@ -2,9 +2,9 @@
 
 #include <random>
 
-class Random_Number_Generator {
+class random_number_generator {
 public:
-    Random_Number_Generator(double _min, double _max);
+    random_number_generator(double _min, double _max);
     double generate();
 
 private:

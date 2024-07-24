@@ -2,9 +2,9 @@
 
 #include "matrix.hpp"
 
-class Neural_Network {
+class neural_network {
 public:
-    explicit Neural_Network(std::vector<size_t> const &_topology);
+    explicit neural_network(std::vector<size_t> const &_topology);
 
     std::vector<double> feed_forward(std::vector<double> const &_input);
     void backprop(std::vector<double> const &_expected);
@@ -12,18 +12,18 @@ public:
     static double mean_squared_error(std::vector<double> const &_result, std::vector<double> const &_expected);
 
 private:
-    std::vector<Matrix> A;
-    std::vector<Matrix> Z;
-    std::vector<Matrix> W;
-    std::vector<Matrix> B;
+    std::vector<matrix> A;
+    std::vector<matrix> Z;
+    std::vector<matrix> W;
+    std::vector<matrix> B;
 
     // memoize the derivatives of cost function
-    std::vector<Matrix> delC_delA;
-    std::vector<Matrix> delA_delZ;
-    std::vector<Matrix> delC_delW;
-    std::vector<Matrix> delC_delB;
+    std::vector<matrix> delC_delA;
+    std::vector<matrix> delA_delZ;
+    std::vector<matrix> delC_delW;
+    std::vector<matrix> delC_delB;
 
-    static Matrix activation_function(Matrix const &_mat);
+    static matrix activation_function(matrix const &_mat);
     static double activation_function(double _x);
     static double activation_function_derivative(double _x);
 

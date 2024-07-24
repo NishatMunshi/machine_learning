@@ -1,8 +1,9 @@
 #include "../include/matrix.hpp"
+
 #include <ctime>
 #include <iostream>
 
-Matrix::Matrix(size_t _rows, size_t _cols)
+matrix::matrix(size_t _rows, size_t _cols)
     : m_rows(_rows), m_cols(_cols) {
     if (_rows == 0 and _cols == 0) {
         throw std::invalid_argument("cannot create 0x0 matrix");
@@ -16,15 +17,15 @@ Matrix::Matrix(size_t _rows, size_t _cols)
     }
 }
 
-bool Matrix::addable(Matrix const &_other) const {
+bool matrix::addable(matrix const &_other) const {
     return m_rows == _other.m_rows and m_cols == _other.m_cols;
 }
 
-bool Matrix::multiplyable(Matrix const &_other) const {
+bool matrix::multiplyable(matrix const &_other) const {
     return m_cols == _other.m_rows;
 }
 
-void Matrix::print() const {
+void matrix::print() const {
     for (const auto &row : m_data) {
         std::cout << '[';
         for (size_t j = 0; j < row.size(); ++j) {
@@ -34,20 +35,20 @@ void Matrix::print() const {
     }
 }
 
-double &Matrix::at(const size_t _row, const size_t _col) {
+double &matrix::at(const size_t _row, const size_t _col) {
     return m_data.at(_row).at(_col);
 }
 
-double Matrix::at(const size_t _row, const size_t _col) const {
+double matrix::at(const size_t _row, const size_t _col) const {
     return m_data.at(_row).at(_col);
 }
 
-Matrix Matrix::operator+(Matrix const &_other) const {
+matrix matrix::operator+(matrix const &_other) const {
     if (not addable(_other)) {
         throw std::invalid_argument("matrix sizes not compatible for addition");
     }
 
-    Matrix result(m_rows, m_cols);
+    matrix result(m_rows, m_cols);
     for (size_t i = 0; i < m_rows; ++i) {
         for (size_t j = 0; j < m_cols; ++j) {
             result.at(i, j) = this->at(i, j) + _other.at(i, j);
@@ -57,12 +58,12 @@ Matrix Matrix::operator+(Matrix const &_other) const {
     return result;
 }
 
-Matrix Matrix::operator-(Matrix const &_other) const {
+matrix matrix::operator-(matrix const &_other) const {
     if (not addable(_other)) {
         throw std::invalid_argument("matrix sizes not compatible for subtraction");
     }
 
-    Matrix result(m_rows, m_cols);
+    matrix result(m_rows, m_cols);
     for (size_t i = 0; i < m_rows; ++i) {
         for (size_t j = 0; j < m_cols; ++j) {
             result.at(i, j) = this->at(i, j) - _other.at(i, j);
@@ -72,7 +73,7 @@ Matrix Matrix::operator-(Matrix const &_other) const {
     return result;
 }
 
-Matrix Matrix::operator*(Matrix const &_other) const {
+matrix matrix::operator*(matrix const &_other) const {
     if (not multiplyable(_other)) {
         throw std::invalid_argument("matrix sizes not compatible for multiplication");
     }
@@ -81,7 +82,7 @@ Matrix Matrix::operator*(Matrix const &_other) const {
     auto const n = m_cols;
     auto const p = _other.m_cols;
 
-    Matrix result(m, p);
+    matrix result(m, p);
     for (size_t i = 0; i < m; ++i) {
         for (size_t j = 0; j < n; ++j) {
             for (size_t k = 0; k < p; ++k) {
@@ -92,7 +93,7 @@ Matrix Matrix::operator*(Matrix const &_other) const {
     return result;
 }
 
-Matrix &Matrix::operator=(Matrix const &_other) {
+matrix &matrix::operator=(matrix const &_other) {
     if (not addable(_other)) {
         throw std::invalid_argument("matrix size not compatible for assignment");
     }
@@ -106,20 +107,20 @@ Matrix &Matrix::operator=(Matrix const &_other) {
     return *this;
 }
 
-size_t Matrix::rows() const {
+size_t matrix::rows() const {
     return m_rows;
 }
 
-size_t Matrix::cols() const {
+size_t matrix::cols() const {
     return m_cols;
 }
 
-Matrix::Matrix(std::vector<double> const &_vec)
+matrix::matrix(std::vector<double> const &_vec)
     : m_rows(1), m_cols(_vec.size()) {
     m_data.push_back(_vec);
 }
 
-std::vector<double> Matrix::vector() const {
+std::vector<double> matrix::vector() const {
     if (m_rows not_eq 1) {
         std::cerr << "WARNING: attempt to vectorize non row matrix. Returning 0th row ...\n";
     }
@@ -127,8 +128,8 @@ std::vector<double> Matrix::vector() const {
     return m_data.front();
 }
 
-Matrix Matrix::operator*(double const _scalar) const {
-    Matrix result = *this;
+matrix matrix::operator*(double const _scalar) const {
+    matrix result = *this;
     for (auto &row : result.m_data) {
         for (auto &elem : row) {
             elem *= _scalar;

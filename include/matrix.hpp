@@ -3,31 +3,34 @@
 #include <cstdint>
 #include <vector>
 
-class Matrix {
+class matrix {
 public:
-    explicit Matrix(size_t _rows, size_t _cols);
-    explicit Matrix(std::vector<double> const &_vec);
-    [[nodiscard]] std::vector<double> vector() const;
-    Matrix(Matrix const &) = default;
+    explicit matrix(size_t _rows, size_t _cols);
+    explicit matrix(std::vector<double> const &_vec);
+    matrix(matrix const &) = default;
 
+public:
     void print() const;
 
-    double &at(size_t _row, size_t _col);
+public:
+    [[nodiscard]] double &at(size_t _row, size_t _col);
     [[nodiscard]] double at(size_t _row, size_t _col) const;
     [[nodiscard]] size_t rows() const;
     [[nodiscard]] size_t cols() const;
+    [[nodiscard]] std::vector<double> vector() const;
 
-    Matrix operator+(Matrix const &_other) const;
-    Matrix operator-(Matrix const &_other) const;
-    Matrix operator*(Matrix const &_other) const;
-    Matrix &operator=(Matrix const &_other);
-    Matrix operator*(double _scalar) const;
+public:
+    matrix operator+(matrix const &_other) const;
+    matrix operator-(matrix const &_other) const;
+    matrix operator*(matrix const &_other) const;
+    matrix &operator=(matrix const &_other);
+    matrix operator*(double _scalar) const;
 
 private:
     std::vector<std::vector<double>> m_data;
     size_t const m_rows;
     size_t const m_cols;
 
-    [[nodiscard]] bool addable(Matrix const &_other) const;
-    [[nodiscard]] bool multiplyable(Matrix const &_other) const;
+    [[nodiscard]] bool addable(matrix const &_other) const;
+    [[nodiscard]] bool multiplyable(matrix const &_other) const;
 };

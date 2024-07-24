@@ -7,9 +7,9 @@ BLD_DIRS = $(OBJ_DIR) $(EXE_DIR)
 TMP_DIRS = $(OBJ_DIR)
 
 # file extentions
+HDR_EXT = hpp
 SRC_EXT = cpp
 OBJ_EXT = o
-HDR_EXT = hpp
 
 # files
 SRCS = $(wildcard $(SRC_DIR)/*.$(SRC_EXT))
