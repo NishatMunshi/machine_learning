@@ -20,15 +20,15 @@ HDRS = $(patsubst $(SRC_DIR)/%.$(SRC_EXT), $(HDR_DIR)/%.$(HDR_EXT), $(SRCS))
 TARGET = $(EXE_DIR)/main
 
 # compiler info
-CXX       = g++
-CXX_STD   = c++20
-CXX_FLAGS = -g -Wall -Wextra -std=$(CXX_STD)
+CXX       	  = g++
+CXX_STD   	  = c++20
+CXX_FLAGS 	  = -g -Wall -Wextra -Wpedantic -std=$(CXX_STD)
 INCLUDE_PATHS =
 
-# linker stuff
-LINKER = $(CXX)
-LINKER_PATHS =
-LINKER_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+# linker info
+LD       = $(CXX)
+LD_PATHS =
+LIBS     = -lsfml-graphics -lsfml-window -lsfml-system
 
 # rules to build the target
 all: build $(TARGET)
@@ -39,7 +39,7 @@ $(OBJ_DIR)/%.$(OBJ_EXT): $(SRC_DIR)/%.$(SRC_EXT) $(HDR_DIR)/%.$(HDR_EXT)
 
 # link
 $(TARGET): $(OBJS)
-	$(CXX) -o $(TARGET) $(OBJS) $(LINKER_PATHS) $(LINKER_FLAGS)
+	$(CXX) -o $(TARGET) $(OBJS) $(LD_PATHS) $(LIBS)
 
 # rule to make build directories
 build:
